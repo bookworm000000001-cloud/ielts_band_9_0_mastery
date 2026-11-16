@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IELTS Band 9.0 Mastery — iOS Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', 'Inter', 'sans-serif'],
+                        serif: ['Newsreader', 'Georgia', 'serif'],
+                    },
+                    colors: {
+                        navy: {
+                            950: '#070E1B',
+                            900: '#0B172A',
+                            800: '#132542',
+                            700: '#1E3A63',
+                        },
+                        gold: {
+                            400: '#FBBF24',
+                            500: '#D97706',
+                            600: '#B45309',
+                        },
+                        emerald: {
+                            500: '#10B981',
+                            600: '#059669',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom iOS Scrollbar & Device Frame Styling */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: radial-gradient(circle at 20% 20%, #162238 0%, #090D16 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Hide scrollbars inside the iPhone viewport while maintaining scrollability */
+        .ios-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .ios-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* iPhone 15/16 Pro Titanium Bezel on Desktop */
+        @media (min-width: 640px) {
+            .iphone-chassis {
+                width: 402px;
+                height: 852px;
+                border-radius: 56px;
+                background: linear-gradient(145deg, #3a3d42, #1f2124, #34373c);
+                padding: 12px;
+                box-shadow: 
+                    0 0 0 2px #52565e,
+                    0 30px 70px -15px rgba(0, 0, 0, 0.85),
+                    0 0 40px rgba(16, 185, 129, 0.12),
+                    inset 0 0 8px rgba(255, 255, 255, 0.25);
+                position: relative;
+            }
+            .iphone-screen {
+                border-radius: 45px;
+                overflow: hidden;
+                height: 100%;
+                width: 100%;
+            }
+            /* Side Hardware Buttons */
+            .hw-btn-left-1 { position: absolute; left: -3px; top: 125px; width: 3px; height: 28px; background: #4a4d52; border-radius: 2px 0 0 2px; }
+            .hw-btn-left-2 { position: absolute; left: -3px; top: 175px; width: 3px; height: 52px; background: #4a4d52; border-radius: 2px 0 0 2px; }
+            .hw-btn-left-3 { position: absolute; left: -3px; top: 240px; width: 3px; height: 52px; background: #4a4d52; border-radius: 2px 0 0 2px; }
+            .hw-btn-right   { position: absolute; right: -3px; top: 200px; width: 3px; height: 78px; background: #4a4d52; border-radius: 0 2px 2px 0; }
+        }
+
+        @media (max-width: 639px) {
+            body {
+                background: #F4F5F8;
+            }
+            .iphone-chassis {
+                width: 100vw;
+                height: 100dvh;
+            }
+            .iphone-screen {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        /* Frosted Glass Tab Bar */
+        .ios-frosted {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* Smooth Progress Ring Transition */
+        .ring-circle {
+            transition: stroke-dashoffset 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* Subtle Card Lift */
+        .ios-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(11, 23, 42, 0.045), 0 1px 2px rgba(11, 23, 42, 0.03);
+            border: 1px solid rgba(226, 232, 240, 0.75);
+        }
+
+        /* View Transition */
+        .tab-view {
+            animation: fadeSlideIn 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Pulse for Recording */
+        @keyframes pulseRing {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .recording-pulse {
+            animation: pulseRing 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center sm:p-6">
+
+    <!-- Desktop Ambient Helper Badge (Hidden on mobile) -->
+    <div class="hidden xl:flex flex-col fixed left-8 top-8 text-slate-300 max-w-xs space-y-2 pointer-events-none select-none">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs font-medium text-emerald-300 w-fit">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            iOS 18 Interactive Preview
+        </div>
+        <h2 class="text-lg font-semibold text-white tracking-tight">IELTS Band 9.0 Studio</h2>
+        <p class="text-xs text-slate-400 leading-relaxed">
+            Engineered for C2-level lexical precision, Task 2 structural mastery, and Part 2/3 speaking fluency. All progress persists locally.
+        </p>
+    </div>
+
+    <!-- iPhone 15/16 Pro Chassis -->
+    <div class="iphone-chassis">
+        <!-- Hardware Buttons -->
+        <div class="hw-btn-left-1 hidden sm:block"></div>
+        <div class="hw-btn-left-2 hidden sm:block"></div>
+        <div class="hw-btn-left-3 hidden sm:block"></div>
+        <div class="hw-btn-right hidden sm:block"></div>
+
+        <!-- iPhone Screen -->
+        <div class="iphone-screen bg-[#F3F4F8] flex flex-col relative select-none sm:select-auto">
+            
+            <!-- iOS Status Bar + Dynamic Island -->
+            <header class="bg-[#F3F4F8]/95 backdrop-blur-md pt-2.5 pb-2 px-6 flex items-center justify-between z-30 shrink-0">
+                <span id="ios-clock" class="text-[13px] font-semibold text-slate-900 tracking-tight w-12">9:41</span>
+                
+                <!-- Dynamic Island Pill -->
+                <div id="dynamic-island" class="bg-black text-white rounded-full h-[27px] px-3.5 flex items-center justify-center gap-2 transition-all duration-300 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span id="island-status" class="text-[10.5px] font-medium tracking-wide text-slate-200">BAND 9.0</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#141926] border border-slate-700/70"></span>
+                </div>
+
+                <!-- Signal / Wifi / Battery Icons -->
+                <div class="flex items-center gap-1.5 text-slate-900 w-12 justify-end">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M2 18h3v4H2v-4zm5-4h3v8H7v-8zm5-5h3v13h-3V9zm5-5h3v18h-3V4z"/></svg>
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-4.9-2.3l1.4 1.4C9.4 16.4 10.6 16 12 16s2.6.4 3.5 1.1l1.4-1.4C15.6 14.6 13.9 14 12 14s-3.6.6-4.9 1.7zm-2.8-2.8l1.4 1.4C7.3 13 9.5 12 12 12s4.7 1 6.3 2.3l1.4-1.4C17.7 11.1 15 10 12 10s-5.7 1.1-7.7 2.9z"/></svg>
+                    <div class="w-5 h-2.5 border border-slate-900/40 rounded-[3px] p-[1px] flex items-center">
+                        <div class="bg-slate-900 h-full w-4/5 rounded-[1.5px]"></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Custom iOS Toast Notification Banner (Replaces alert()) -->
+            <div id="ios-toast" class="fixed sm:absolute top-12 left-4 right-4 z-50 pointer-events-none opacity-0 -translate-y-3 transition-all duration-300">
+                <div class="bg-navy-900/95 backdrop-blur-md text-white px-4 py-3 rounded-2xl shadow-xl border border-white/10 flex items-center gap-3">
+                    <div id="toast-icon" class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-sm">✓</div>
+                    <div class="flex-1 min-w-0">
+                        <p id="toast-title" class="text-xs font-semibold text-white truncate">Saved to Lexicon</p>
+                        <p id="toast-msg" class="text-[11px] text-slate-300 truncate">Added to your Band 9.0 review deck.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Scrollable Viewport -->
+            <main id="app-viewport" class="flex-1 overflow-y-auto ios-scroll px-4 pb-24 pt-1 space-y-4">
+                <!-- Content dynamically injected per active tab -->
+            </main>
+
+            <!-- Bottom Frosted iOS Tab Bar -->
+            <nav class="ios-frosted border-t border-slate-200/80 px-2 pt-2 pb-5 sm:pb-6 flex items-center justify-around z-30 shrink-0">
+                <button onclick="switchTab('home')" data-tab="home" class="nav-btn flex flex-col items-center gap-1 w-16 text-navy-900 transition-colors">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    <span class="text-[10px] font-semibold tracking-tight">Home</span>
+                </button>
+                <button onclick="switchTab('lexicon')" data-tab="lexicon" class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-400 transition-colors">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    <span class="text-[10px] font-semibold tracking-tight">Lexicon</span>
+                </button>
+                <button onclick="switchTab('writing')" data-tab="writing" class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-400 transition-colors">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    <span class="text-[10px] font-semibold tracking-tight">Writing</span>
+                </button>
+                <button onclick="switchTab('speaking')" data-tab="speaking" class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-400 transition-colors">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                    <span class="text-[10px] font-semibold tracking-tight">Speaking</span>
+                </button>
+                <button onclick="switchTab('drills')" data-tab="drills" class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-400 transition-colors">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="text-[10px] font-semibold tracking-tight">Drills</span>
+                </button>
+            </nav>
+
+            <!-- iOS Home Indicator Bar -->
+            <div class="hidden sm:block absolute bottom-1.5 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-900/80 rounded-full z-40 pointer-events-none"></div>
+        </div>
+    </div>
+
+    <!-- Modal Sheet for Quick 5-Minute Drill & Essay Feedback -->
+    <div id="ios-modal" class="fixed sm:absolute inset-0 z-50 hidden items-end justify-center bg-slate-950/50 backdrop-blur-xs transition-opacity">
+        <div id="ios-modal-sheet" class="bg-[#F8F9FB] w-full max-h-[88%] rounded-t-3xl p-5 shadow-2xl overflow-y-auto ios-scroll transform transition-transform translate-y-0">
+            <!-- Injected dynamically -->
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           1. DATA REPOSITORY (C2 LEXICON, WRITING PROMPTS, SPEAKING CARDS, DRILLS)
+           ========================================================================== */
+        const WORD_OF_THE_DAY_LIST = [
+            {
+                word: "Ubiquitous",
+                phonetic: "/juːˈbɪk.wɪ.təs/",
+                pos: "adjective • C2 Academic",
+                definition: "Present, appearing, or found everywhere simultaneously; inescapable in modern life.",
+                example: "The ubiquitous nature of algorithmic curation has subtly reshaped public discourse and epistemic trust.",
+                synonymFrom: "very common / everywhere"
+            },
+            {
+                word: "Exacerbate",
+                phonetic: "/ɪɡˈzæs.ə.beɪt/",
+                pos: "verb • C2 Academic",
+                definition: "To make a problem, bad situation, or negative feeling markedly worse.",
+                example: "Unregulated urban sprawl continues to exacerbate infrastructural bottlenecks in megacities.",
+                synonymFrom: "make worse"
+            },
+            {
+                word: "Dichotomy",
+                phonetic: "/daɪˈkɒt.ə.mi/",
+                pos: "noun • C2 Academic",
+                definition: "A sharp division or contrast between two things that are represented as being entirely opposed.",
+                example: "Policymakers often grapple with the false dichotomy between economic growth and ecological preservation.",
+                synonymFrom: "big difference / split"
+            }
+        ];
+
+        const LEXICON_UPGRADES = [
+            {
+                id: "lex1",
+                theme: "Environment",
+                band7: "Governments must make strict laws to stop companies from polluting rivers and damaging nature.",
+                band9: "Governments must enact stringent legislation to deter corporations from discharging effluent and degrading fragile ecosystems.",
+                highlights: [
+                    { phrase: "enact stringent legislation", note: "C2 legal collocation replacing 'make strict laws'" },
+                    { phrase: "degrading fragile ecosystems", note: "Precise ecological terminology replacing 'damaging nature'" }
+                ]
+            },
+            {
+                id: "lex2",
+                theme: "Technology",
+                band7: "Nowadays, artificial intelligence is changing jobs very fast, and many workers are worried about losing their work.",
+                band9: "In the contemporary era, artificial intelligence is precipitating rapid structural shifts in the labor market, fueling widespread anxiety over technological displacement.",
+                highlights: [
+                    { phrase: "precipitating rapid structural shifts", note: "Sophisticated verb + noun collocation for 'changing very fast'" },
+                    { phrase: "technological displacement", note: "Band 9.0 economics term for losing jobs to automation" }
+                ]
+            },
+            {
+                id: "lex3",
+                theme: "Globalization",
+                band7: "Global trade helps poor countries grow their economy, even though it sometimes hurts local traditions.",
+                band9: "Cross-border commerce acts as a catalyst for macroeconomic development in emerging nations, albeit occasionally at the expense of indigenous cultural heritage.",
+                highlights: [
+                    { phrase: "catalyst for macroeconomic development", note: "High-precision academic phrasing" },
+                    { phrase: "albeit occasionally at the expense of", note: "C2 concessive discourse marker" }
+                ]
+            },
+            {
+                id: "lex4",
+                theme: "Education",
+                band7: "Schools should teach students how to think critically instead of just memorizing facts for exams.",
+                band9: "Educational curricula ought to cultivate critical inquiry rather than merely incentivizing rote memorization for standardized assessments.",
+                highlights: [
+                    { phrase: "cultivate critical inquiry", note: "Natural academic verb-noun pairing" },
+                    { phrase: "rote memorization", note: "Exact idiomatic term for memorizing without understanding" }
+                ]
+            },
+            {
+                id: "lex5",
+                theme: "Health",
+                band7: "Eating unhealthy fast food and not exercising causes many people to become overweight and sick.",
+                band9: "The proliferation of ultra-processed diets coupled with sedentary lifestyles has precipitated a surge in chronic metabolic disorders.",
+                highlights: [
+                    { phrase: "sedentary lifestyles", note: "Essential Band 8–9 health collocation" },
+                    { phrase: "chronic metabolic disorders", note: "Clinical precision replacing 'become sick'" }
+                ]
+            }
+        ];
+
+        const COLLOCATIONS_DB = [
+            { term: "Mitigate the adverse effects", cat: "Cause & Effect", meaning: "Reduce the harmful impact of something", ex: "Reforestation initiatives help mitigate the adverse effects of carbon emissions." },
+            { term: "A double-edged sword", cat: "Idiomatic", meaning: "Something having both favorable and unfavorable consequences", ex: "Hyper-connectivity is a double-edged sword that fosters collaboration while eroding privacy." },
+            { term: "Inextricably linked", cat: "Academic", meaning: "Impossible to separate or disentangle", ex: "Public health outcomes are inextricably linked to socioeconomic status." },
+            { term: "Albeit", cat: "Discourse Marker", meaning: "Although; notwithstanding", ex: "The policy proved effective, albeit costly to implement initially." },
+            { term: "Paramount importance", cat: "Emphasis", meaning: "More important than anything else", ex: "Equitable access to primary healthcare is of paramount importance." },
+            { term: "Stem the tide of", cat: "Idiomatic", meaning: "Stop something undesirable from spreading", ex: "Strict digital literacy programs may help stem the tide of misinformation." },
+            { term: "Notwithstanding", cat: "Discourse Marker", meaning: "In spite of; nevertheless", ex: "Notwithstanding fiscal constraints, investment in renewable infrastructure remains vital." },
+            { term: "Proliferation of", cat: "Academic", meaning: "Rapid increase in numbers or spread", ex: "The proliferation of remote work has transformed urban commuting patterns." }
+        ];
+
+        const WRITING_PROMPTS = [
+            {
+                id: "t2_tech",
+                type: "Task 2 • Opinion / Discussion",
+                mins: 40,
+                targetWords: 250,
+                prompt: "Some people believe that unpaid community service should be a compulsory part of high school programs. To what extent do you agree or disagree?",
+                modelSegments: [
+                    { text: "In recent years, the integration of mandatory civic engagement into secondary education has sparked considerable debate. ", type: "normal" },
+                    { text: "While critics contend that compulsory volunteering infringes upon students' autonomy, I firmly believe that such initiatives yield profound pedagogical and societal dividends.", type: "thesis", note: "Band 9.0 Thesis: Uses concessive 'While...' clause + 'pedagogical and societal dividends' (C2 collocation)." },
+                    { text: "\n\nPrimarily, structured community service cultivates empathy and social responsibility during a formative stage of adolescence. ", type: "cohesion", note: "Cohesive Progression: 'Primarily' + 'formative stage of adolescence' sets a crisp topic sentence." },
+                    { text: "When adolescents step outside insular academic environments to assist marginalized demographics, they gain firsthand insight into socioeconomic disparities. This experiential learning fosters civic-mindedness that cannot be replicated through theoretical instruction alone.", type: "normal" },
+                    { text: "\n\nAdmittedly, detractors argue that coerced altruism is a contradiction in terms and may overburden exam-focused pupils. ", type: "lexical", note: "Lexical Precision: 'coerced altruism is a contradiction in terms' shows effortless C2 idiomatic control." },
+                    { text: "Nevertheless, when calibrated to a modest commitment—such as twenty hours per academic year—the benefits far outweigh any marginal imposition on study schedules.", type: "normal" }
+                ]
+            },
+            {
+                id: "t1_chart",
+                type: "Task 1 • Academic Data",
+                mins: 20,
+                targetWords: 150,
+                prompt: "The line graph illustrates the proportion of electricity generated from renewable sources in four European nations between 2005 and 2025.",
+                modelSegments: [
+                    { text: "The line graph compares the percentage of electrical power derived from renewable energy across four European countries over a two-decade period starting in 2005. ", type: "normal" },
+                    { text: "Overall, all four nations experienced a marked upward trajectory in green energy adoption, with Denmark consistently outperforming its counterparts.", type: "thesis", note: "Band 9.0 Overview: Synthesizes the main trend ('marked upward trajectory') without listing raw numbers prematurely." },
+                    { text: "\n\nIn 2005, Denmark led the cohort at roughly 28%, subsequently surging to just under 75% by 2025. ", type: "lexical", note: "Task 1 Precision: 'led the cohort' and 'subsequently surging' avoid repetitive 'increased' phrasing." },
+                    { text: "Conversely, France exhibited the most modest expansion, climbing gradually from 10% to 26% over the same timeframe.", type: "cohesion", note: "Contrastive Cohesive Device: 'Conversely' cleanly pivots to an opposing data pattern." }
+                ]
+            }
+        ];
+
+        const SPEAKING_CARDS = [
+            {
+                part: "Part 2 • Long Turn",
+                topic: "Describe a piece of technology you find difficult to live without.",
+                bullets: [
+                    "What the technology is",
+                    "How frequently you rely on it",
+                    "What specific tasks it enables you to accomplish",
+                    "And explain why it has become indispensable to you"
+                ],
+                part3: [
+                    "How has hyper-connectivity altered interpersonal relationships in your country?",
+                    "Do you think governments should regulate screen time for adolescents?"
+                ],
+                sampleHtml: `
+                    <p class="mb-2.5"><span class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-medium">Off the top of my head</span>, the single piece of technology that has become virtually indispensable to my daily routine is my noise-canceling headphones.</p>
+                    <p class="mb-2.5">Living in a bustling metropolis, ambient noise can be <span class="bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded font-medium">nothing short of overwhelming</span>. Whether I am commuting on a packed train or drafting complex reports in a crowded café, these headphones create an immediate acoustic sanctuary.</p>
+                    <p><span class="bg-indigo-100 text-indigo-900 px-1.5 py-0.5 rounded font-medium">By and large</span>, they allow me to enter a state of deep cognitive focus on demand, which is vital for my productivity.</p>
+                `,
+                markers: ["Off the top of my head (Natural opener)", "nothing short of overwhelming (C2 emphasis)", "By and large (Idiomatic summary)"]
+            },
+            {
+                part: "Part 2 • Long Turn",
+                topic: "Describe an environmental problem that has been in the news recently.",
+                bullets: [
+                    "What the environmental issue is",
+                    "Where it is occurring",
+                    "What the primary causes are",
+                    "And explain what measures could mitigate it"
+                ],
+                part3: [
+                    "Whose responsibility is it primarily to combat climate change: individuals or corporations?",
+                    "Why do some societies struggle to transition away from fossil fuels?"
+                ],
+                sampleHtml: `
+                    <p class="mb-2.5"><span class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-medium">If memory serves me right</span>, one issue that has dominated headlines lately is the rapid bleaching of coral reefs caused by marine heatwaves.</p>
+                    <p class="mb-2.5">What makes this particularly alarming is the <span class="bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded font-medium">domino effect</span> it triggers across marine biodiversity and coastal livelihoods.</p>
+                    <p><span class="bg-indigo-100 text-indigo-900 px-1.5 py-0.5 rounded font-medium">At the end of the day</span>, curbing industrial carbon emissions isn't merely an ecological imperative—it is an economic necessity.</p>
+                `,
+                markers: ["If memory serves me right (Authentic hesitation filler)", "domino effect (Idiomatic metaphor)", "At the end of the day (Natural conclusion)"]
+            }
+        ];
+
+        const PRECISION_DRILLS = [
+            {
+                id: "d1",
+                skill: "Reading • True / False / Not Given",
+                passage: "While early proponents of urban vertical farming predicted it would replace traditional agriculture within decades, recent economic audits indicate that high energy expenditure restricts its commercial viability primarily to high-margin leafy greens and herbs.",
+                question: "Statement: Vertical farming is currently more profitable than traditional farming for growing staple grain crops.",
+                options: ["TRUE", "FALSE", "NOT GIVEN"],
+                correct: 1,
+                explanation: "<strong>FALSE.</strong> The text explicitly states that high energy expenditure 'restricts its commercial viability primarily to high-margin leafy greens and herbs,' directly contradicting profitability for staple grain crops."
+            },
+            {
+                id: "d2",
+                skill: "Reading • Inference Trap",
+                passage: "Dr. Aris Thorne’s longitudinal study tracked 4,000 bilingual professionals over fifteen years. Although participants demonstrated superior executive control on task-switching tests, no statistically significant variance was observed in long-term episodic memory retention compared to monolingual peers.",
+                question: "Statement: Bilingual individuals are less likely to experience age-related memory decline than monolinguals.",
+                options: ["TRUE", "FALSE", "NOT GIVEN"],
+                correct: 2,
+                explanation: "<strong>NOT GIVEN.</strong> The passage states there was 'no statistically significant variance' in episodic memory retention during the 15-year study, and makes no claim whatsoever about age-related memory decline."
+            },
+            {
+                id: "d3",
+                skill: "Listening • Section 4 Signposting Trap",
+                passage: "[Audio Transcript] 'Initially, archaeologists assumed the terracotta vessels were ceremonial urns. However, residue chromatography conducted in 2024 revealed traces of fermented barley—Wait, scratch that—the preliminary barley reading was lab contamination; subsequent mass spectrometry confirmed olive oil storage.'",
+                question: "What was the final confirmed purpose of the terracotta vessels?",
+                options: ["Ceremonial rituals", "Storing fermented barley", "Storing olive oil"],
+                correct: 2,
+                explanation: "<strong>Storing olive oil.</strong> Classic IELTS Listening Section 3/4 distractor: the speaker introduces two plausible distractors ('ceremonial urns', 'fermented barley') and self-corrects ('Wait, scratch that') before delivering the true answer."
+            },
+            {
+                id: "d4",
+                skill: "Lexical Precision • C2 Collocation",
+                passage: "Choose the most natural Band 9.0 word to complete the academic sentence: 'The committee decided to ______ the implementation of the new tax until economic stability returned.'",
+                question: "Which verb fits with C2 collocation accuracy?",
+                options: ["defer", "procrastinate", "lengthen"],
+                correct: 0,
+                explanation: "<strong>defer.</strong> 'Defer implementation' is a standard formal/policy collocation meaning to postpone officially. 'Procrastinate' applies to human psychological delay, not institutional policy."
+            }
+        ];
+
+        /* ==========================================================================
+           2. APPLICATION STATE & LOCALSTORAGE PERSISTENCE
+           ========================================================================== */
+        const DEFAULT_STATE = {
+            activeTab: 'home',
+            scores: {
+                listening: 8.5,
+                reading: 8.5,
+                writing: 8.0,
+                speaking: 8.5
+            },
+            savedLexicon: ['lex1', 'Mitigate the adverse effects'],
+            completedDrills: [],
+            streakDays: 12,
+            wotdIndex: 0,
+            lexTheme: 'All',
+            lexSearch: '',
+            writingPromptId: 't2_tech',
+            writingDraft: '',
+            writingMode: 'write', // 'write' or 'model'
+            speakingCardIdx: 0
+        };
+
+        let appState = loadState();
+        let writingTimerInterval = null;
+        let writingSecondsLeft = 40 * 60;
+        let writingTimerRunning = false;
+
+        let speakingTimerInterval = null;
+        let speakingSeconds = 0;
+        let speakingPhase = 'idle'; // 'idle' | 'prep' | 'speak'
+
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let recordedAudioUrl = null;
+        let isRecordingAudio = false;
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem('ielts_band9_ios_state_v1');
+                if (raw) {
+                    return { ...DEFAULT_STATE, ...JSON.parse(raw) };
+                }
+            } catch (e) {
+                console.warn('LocalStorage unavailable, using memory state.');
+            }
+            return { ...DEFAULT_STATE };
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('ielts_band9_ios_state_v1', JSON.stringify(appState));
+            } catch (e) {
+                // Ignore storage quota errors
+            }
+        }
+
+        /* ==========================================================================
+           3. CORE UI HELPERS (CLOCK, TOAST, SPEECH SYNTHESIS, RINGS)
+           ========================================================================== */
+        function updateClock() {
+            const now = new Date();
+            const hrs = now.getHours();
+            const mins = String(now.getMinutes()).padStart(2, '0');
+            const displayHrs = hrs % 12 || 12;
+            const el = document.getElementById('ios-clock');
+            if (el) el.textContent = `${displayHrs}:${mins}`;
+        }
+        setInterval(updateClock, 15000);
+        updateClock();
+
+        let toastTimeout = null;
+        function showToast(title, msg, icon = '✓') {
+            const toast = document.getElementById('ios-toast');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-msg').textContent = msg;
+            document.getElementById('toast-icon').textContent = icon;
+            
+            toast.classList.remove('opacity-0', '-translate-y-3', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-3', 'pointer-events-none');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 2600);
+        }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) {
+                showToast('Audio Unavailable', 'Speech synthesis is not supported in this browser.', '!');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-GB';
+            utterance.rate = 0.92;
+            const voices = window.speechSynthesis.getVoices();
+            const ukVoice = voices.find(v => v.lang.includes('en-GB') && v.name.includes('Daniel')) 
+                         || voices.find(v => v.lang.includes('en-GB')) 
+                         || voices.find(v => v.lang.includes('en'));
+            if (ukVoice) utterance.voice = ukVoice;
+            
+            document.getElementById('island-status').textContent = 'SPEAKING...';
+            utterance.onend = () => {
+                document.getElementById('island-status').textContent = 'BAND 9.0';
+            };
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function getOverallBand() {
+            const { listening, reading, writing, speaking } = appState.scores;
+            const avg = (listening + reading + writing + speaking) / 4;
+            return (Math.round(avg * 2) / 2).toFixed(1);
+        }
+
+        function buildProgressRing(label, score, colorHex) {
+            const radius = 24;
+            const circumference = 2 * Math.PI * radius;
+            const pct = Math.min(100, Math.max(0, (score / 9.0) * 100));
+            const offset = circumference - (pct / 100) * circumference;
+
+            return `
+                <div class="flex flex-col items-center">
+                    <div class="relative w-16 h-16 flex items-center justify-center">
+                        <svg class="w-16 h-16" viewBox="0 0 60 60">
+                            <circle cx="30" cy="30" r="${radius}" fill="none" stroke="#E2E8F0" stroke-width="5"></circle>
+                            <circle class="ring-circle" cx="30" cy="30" r="${radius}" fill="none" stroke="${colorHex}" stroke-width="5" stroke-linecap="round"
+                                stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"></circle>
+                        </svg>
+                        <span class="absolute text-sm font-bold text-slate-900">${score.toFixed(1)}</span>
+                    </div>
+                    <span class="text-[11px] font-medium text-slate-500 mt-1">${label}</span>
+                </div>
+            `;
+        }
+
+        /* ==========================================================================
+           4. TAB NAVIGATION & VIEW RENDERERS
+           ========================================================================== */
+        function switchTab(tabName) {
+            appState.activeTab = tabName;
+            saveState();
+
+            // Update bottom tab bar active styling
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const isTarget = btn.dataset.tab === tabName;
+                btn.classList.toggle('text-navy-900', isTarget);
+                btn.classList.toggle('text-slate-400', !isTarget);
+            });
+
+            const viewport = document.getElementById('app-viewport');
+            viewport.scrollTop = 0;
+
+            if (tabName === 'home') renderHome(viewport);
+            else if (tabName === 'lexicon') renderLexicon(viewport);
+            else if (tabName === 'writing') renderWriting(viewport);
+            else if (tabName === 'speaking') renderSpeaking(viewport);
+            else if (tabName === 'drills') renderDrills(viewport);
+        }
+
+        /* -------------------- VIEW 1: HOME DASHBOARD -------------------- */
+        function renderHome(container) {
+            const overall = getOverallBand();
+            const wotd = WORD_OF_THE_DAY_LIST[appState.wotdIndex % WORD_OF_THE_DAY_LIST.length];
+
+            container.innerHTML = `
+                <div class="tab-view space-y-4">
+                    <!-- Top Header -->
+                    <div class="flex items-center justify-between pt-1">
+                        <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">IELTS Academic • C2 Track</p>
+                            <h1 class="text-2xl font-extrabold text-navy-900 tracking-tight">Band 9.0 Studio</h1>
+                        </div>
+                        <div class="flex items-center gap-1.5 bg-amber-50 border border-amber-200/80 px-3 py-1.5 rounded-full">
+                            <span class="text-sm">🔥</span>
+                            <span class="text-xs font-bold text-amber-800">${appState.streakDays}d</span>
+                        </div>
+                    </div>
+
+                    <!-- Overall Band 9.0 Readiness Hero Card -->
+                    <div class="bg-gradient-to-br from-navy-900 via-navy-800 to-navy-950 rounded-3xl p-5 text-white shadow-lg relative overflow-hidden">
+                        <div class="absolute -right-8 -top-8 w-36 h-36 rounded-full bg-emerald-500/10 blur-xl pointer-events-none"></div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 text-[10px] font-semibold text-emerald-300 tracking-wide uppercase">
+                                    Current Trajectory
+                                </span>
+                                <div class="flex items-baseline gap-2 mt-1.5">
+                                    <span class="text-4xl font-extrabold tracking-tight text-white">${overall}</span>
+                                    <span class="text-xs font-medium text-slate-300">/ 9.0 Target Band</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[11px] text-slate-400 block">Saved Lexicon</span>
+                                <span class="text-lg font-bold text-gold-400">${appState.savedLexicon.length} <span class="text-xs font-normal text-slate-300">items</span></span>
+                            </div>
+                        </div>
+
+                        <!-- Skill Breakdown Mini Pills -->
+                        <div class="grid grid-cols-4 gap-2 pt-3 border-t border-white/10 text-center">
+                            <div class="bg-white/5 rounded-xl py-2 px-1">
+                                <span class="text-[10px] text-slate-400 block">List</span>
+                                <span class="text-sm font-bold text-white">${appState.scores.listening.toFixed(1)}</span>
+                            </div>
+                            <div class="bg-white/5 rounded-xl py-2 px-1">
+                                <span class="text-[10px] text-slate-400 block">Read</span>
+                                <span class="text-sm font-bold text-white">${appState.scores.reading.toFixed(1)}</span>
+                            </div>
+                            <div class="bg-white/5 rounded-xl py-2 px-1">
+                                <span class="text-[10px] text-slate-400 block">Write</span>
+                                <span class="text-sm font-bold text-emerald-400">${appState.scores.writing.toFixed(1)}</span>
+                            </div>
+                            <div class="bg-white/5 rounded-xl py-2 px-1">
+                                <span class="text-[10px] text-slate-400 block">Speak</span>
+                                <span class="text-sm font-bold text-gold-400">${appState.scores.speaking.toFixed(1)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Rings Card -->
+                    <div class="ios-card p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Module Mastery Rings</h2>
+                            <span class="text-[11px] font-medium text-emerald-600">Updated live</span>
+                        </div>
+                        <div class="grid grid-cols-4 gap-2">
+                            ${buildProgressRing('Listening', appState.scores.listening, '#0EA5E9')}
+                            ${buildProgressRing('Reading', appState.scores.reading, '#6366F1')}
+                            ${buildProgressRing('Writing', appState.scores.writing, '#10B981')}
+                            ${buildProgressRing('Speaking', appState.scores.speaking, '#D97706')}
+                        </div>
+                    </div>
+
+                    <!-- Word & Idiom of the Day (C2 Lexical Resource) -->
+                    <div class="ios-card p-4 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-navy-900 text-gold-400">
+                                Word of the Day • C2
+                            </span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="cycleWotd()" class="text-xs font-medium text-slate-500 hover:text-navy-900 px-2 py-1 rounded-lg bg-slate-100 active:scale-95 transition">
+                                    Next ↻
+                                </button>
+                                <button onclick="speakText('${wotd.word}. ${wotd.example.replace(/'/g, "\\'")}')" class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center active:scale-90 transition" title="Pronounce">
+                                    🔊
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-baseline gap-2">
+                                <h3 class="text-xl font-bold text-navy-900 font-serif">${wotd.word}</h3>
+                                <span class="text-xs text-slate-400 font-mono">${wotd.phonetic}</span>
+                            </div>
+                            <p class="text-[11px] font-medium text-emerald-700 mt-0.5">Replaces Band 6.5: "${wotd.synonymFrom}"</p>
+                        </div>
+
+                        <p class="text-xs text-slate-600 leading-relaxed">${wotd.definition}</p>
+
+                        <div class="bg-slate-50 border-l-3 border-gold-500 p-3 rounded-r-xl">
+                            <p class="text-[11px] font-semibold text-slate-400 uppercase mb-0.5">Band 9.0 Context</p>
+                            <p class="text-xs text-slate-800 italic leading-relaxed">"${wotd.example}"</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick-Start 5-Minute Band 9.0 Drill CTA -->
+                    <button onclick="openQuickDrillModal()" class="w-full ios-card p-4 flex items-center justify-between bg-gradient-to-r from-emerald-600 to-teal-700 text-white border-0 shadow-md active:scale-[0.99] transition">
+                        <div class="text-left">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-100">Daily Precision Sprint</span>
+                            <h3 class="text-base font-bold mt-0.5">5-Minute Band 9.0 Challenge</h3>
+                            <p class="text-xs text-emerald-100/90 mt-0.5">3 rapid C2 trap questions • +0.1 Band boost</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg font-bold shrink-0">
+                            →
+                        </div>
+                    </button>
+                </div>
+            `;
+        }
+
+        function cycleWotd() {
+            appState.wotdIndex = (appState.wotdIndex + 1) % WORD_OF_THE_DAY_LIST.length;
+            saveState();
+            renderHome(document.getElementById('app-viewport'));
+        }
+
+        /* -------------------- VIEW 2: LEXICON & UPGRADER -------------------- */
+        function renderLexicon(container) {
+            const themes = ['All', 'Environment', 'Technology', 'Globalization', 'Education', 'Health'];
+            const filteredUpgrades = LEXICON_UPGRADES.filter(item => {
+                const matchTheme = appState.lexTheme === 'All' || item.theme === appState.lexTheme;
+                const q = appState.lexSearch.toLowerCase();
+                const matchSearch = !q || item.band7.toLowerCase().includes(q) || item.band9.toLowerCase().includes(q) || item.theme.toLowerCase().includes(q);
+                return matchTheme && matchSearch;
+            });
+
+            const filteredCollocations = COLLOCATIONS_DB.filter(c => {
+                const q = appState.lexSearch.toLowerCase();
+                return !q || c.term.toLowerCase().includes(q) || c.meaning.toLowerCase().includes(q) || c.cat.toLowerCase().includes(q);
+            });
+
+            container.innerHTML = `
+                <div class="tab-view space-y-4">
+                    <div class="pt-1">
+                        <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Lexical Resource (25% of Score)</p>
+                        <h1 class="text-2xl font-extrabold text-navy-900 tracking-tight">Band 7 → 9 Upgrader</h1>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="relative">
+                        <input type="text" value="${appState.lexSearch}" oninput="updateLexSearch(this.value)"
+                            placeholder="Search C2 collocations, idioms, themes..."
+                            class="w-full bg-white border border-slate-200 rounded-2xl pl-9 pr-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-navy-800 shadow-2xs">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+
+                    <!-- Horizontal Theme Pills -->
+                    <div class="flex gap-1.5 overflow-x-auto ios-scroll pb-1">
+                        ${themes.map(t => `
+                            <button onclick="setLexTheme('${t}')" class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition ${appState.lexTheme === t ? 'bg-navy-900 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200'}">
+                                ${t}
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <!-- Sentence Transformer Cards -->
+                    <div class="space-y-3">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Sentence Transformations (${filteredUpgrades.length})</h2>
+                        ${filteredUpgrades.map(item => {
+                            const isSaved = appState.savedLexicon.includes(item.id);
+                            return `
+                                <div class="ios-card p-4 space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">${item.theme}</span>
+                                        <div class="flex items-center gap-2">
+                                            <button onclick="speakText('${item.band9.replace(/'/g, "\\'")}')" class="text-xs text-slate-500 hover:text-navy-900 p-1" title="Listen">🔊</button>
+                                            <button onclick="toggleSaveLexicon('${item.id}', '${item.theme} Transformation')" class="text-xs font-semibold px-2.5 py-1 rounded-full transition ${isSaved ? 'bg-gold-400/20 text-amber-800' : 'bg-slate-100 text-slate-600'}">
+                                                ${isSaved ? '★ Saved' : '☆ Save'}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Band 6.5/7.0 Baseline -->
+                                    <div class="bg-rose-50/70 border border-rose-100 rounded-xl p-2.5">
+                                        <span class="text-[10px] font-bold uppercase text-rose-600 block mb-0.5">Band 6.5 / 7.0 Baseline</span>
+                                        <p class="text-xs text-slate-700 leading-relaxed">"${item.band7}"</p>
+                                    </div>
+
+                                    <!-- Band 9.0 Upgrade -->
+                                    <div class="bg-emerald-50/80 border border-emerald-200/80 rounded-xl p-3">
+                                        <span class="text-[10px] font-bold uppercase text-emerald-700 block mb-0.5">Band 9.0 C2 Upgrade</span>
+                                        <p class="text-xs font-medium text-navy-900 leading-relaxed">"${item.band9}"</p>
+                                    </div>
+
+                                    <!-- Key Lexical Shifts -->
+                                    <div class="space-y-1 pt-1">
+                                        ${item.highlights.map(h => `
+                                            <div class="flex items-start gap-1.5 text-[11px]">
+                                                <span class="text-emerald-600 font-bold">✦</span>
+                                                <p class="text-slate-600"><strong class="text-navy-900">${h.phrase}:</strong> ${h.note}</p>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- C2 Collocations & Discourse Markers -->
+                    <div class="space-y-2.5 pt-2">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">High-Scoring Collocations & Markers</h2>
+                        ${filteredCollocations.map(col => {
+                            const isSaved = appState.savedLexicon.includes(col.term);
+                            return `
+                                <div class="ios-card p-3.5 flex items-start justify-between gap-3">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-bold text-navy-900">${col.term}</span>
+                                            <span class="text-[10px] font-medium px-2 py-0.5 rounded bg-indigo-50 text-indigo-700">${col.cat}</span>
+                                        </div>
+                                        <p class="text-xs text-slate-600">${col.meaning}</p>
+                                        <p class="text-[11px] text-slate-500 italic">"${col.ex}"</p>
+                                    </div>
+                                    <button onclick="toggleSaveLexicon('${col.term.replace(/'/g, "\\'")}', '${col.term.replace(/'/g, "\\'")}')" class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm ${isSaved ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'}">
+                                        ${isSaved ? '★' : '☆'}
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function setLexTheme(theme) {
+            appState.lexTheme = theme;
+            saveState();
+            renderLexicon(document.getElementById('app-viewport'));
+        }
+
+        function updateLexSearch(val) {
+            appState.lexSearch = val;
+            renderLexicon(document.getElementById('app-viewport'));
+        }
+
+        function toggleSaveLexicon(id, label) {
+            const idx = appState.savedLexicon.indexOf(id);
+            if (idx > -1) {
+                appState.savedLexicon.splice(idx, 1);
+                showToast('Removed', `Removed "${label}" from saved deck.`, '–');
+            } else {
+                appState.savedLexicon.push(id);
+                showToast('Saved to Lexicon', `"${label}" bookmarked for review.`, '★');
+            }
+            saveState();
+            if (appState.activeTab === 'lexicon') renderLexicon(document.getElementById('app-viewport'));
+        }
+
+        /* -------------------- VIEW 3: WRITING ANALYZER & MODELS -------------------- */
+        function renderWriting(container) {
+            const currentPrompt = WRITING_PROMPTS.find(p => p.id === appState.writingPromptId) || WRITING_PROMPTS[0];
+            const wordCount = countWords(appState.writingDraft);
+            const mins = String(Math.floor(writingSecondsLeft / 60)).padStart(2, '0');
+            const secs = String(writingSecondsLeft % 60).padStart(2, '0');
+
+            container.innerHTML = `
+                <div class="tab-view space-y-3.5">
+                    <div class="flex items-center justify-between pt-1">
+                        <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Academic Writing Lab</p>
+                            <h1 class="text-2xl font-extrabold text-navy-900 tracking-tight">Essay Analyzer</h1>
+                        </div>
+                        <!-- Timer Pill -->
+                        <button onclick="toggleWritingTimer()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition ${writingTimerRunning ? 'bg-rose-50 border-rose-200 text-rose-700' : 'bg-white border-slate-200 text-navy-900'}">
+                            <span>⏱</span>
+                            <span id="writing-timer-display">${mins}:${secs}</span>
+                        </button>
+                    </div>
+
+                    <!-- Task Selector Pills -->
+                    <div class="flex gap-2">
+                        ${WRITING_PROMPTS.map(p => `
+                            <button onclick="selectWritingPrompt('${p.id}')" class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold border transition text-left ${appState.writingPromptId === p.id ? 'bg-navy-900 text-white border-navy-900' : 'bg-white text-slate-600 border-slate-200'}">
+                                ${p.type}
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <!-- Prompt Box -->
+                    <div class="ios-card p-3.5 bg-slate-50/90">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-navy-700">Official Prompt</span>
+                            <span class="text-[10px] font-medium text-slate-500">Min ${currentPrompt.targetWords} words</span>
+                        </div>
+                        <p class="text-xs font-medium text-slate-800 leading-relaxed">${currentPrompt.prompt}</p>
+                    </div>
+
+                    <!-- Segmented Control: Practice Draft vs Annotated Band 9 Model -->
+                    <div class="bg-slate-200/80 p-1 rounded-xl grid grid-cols-2 text-xs font-semibold">
+                        <button onclick="setWritingMode('write')" class="py-1.5 rounded-lg transition ${appState.writingMode === 'write' ? 'bg-white text-navy-900 shadow-2xs' : 'text-slate-600'}">
+                            Your Essay Draft
+                        </button>
+                        <button onclick="setWritingMode('model')" class="py-1.5 rounded-lg transition ${appState.writingMode === 'model' ? 'bg-white text-navy-900 shadow-2xs' : 'text-slate-600'}">
+                            Annotated Band 9.0
+                        </button>
+                    </div>
+
+                    ${appState.writingMode === 'write' ? `
+                        <!-- Interactive Essay Editor -->
+                        <div class="ios-card p-3 space-y-2">
+                            <textarea id="essay-textarea" rows="8" oninput="handleDraftInput(this.value)"
+                                placeholder="Draft your Band 9.0 response here... Tip: Use concessive clauses (While..., Admittedly...) and precise C2 collocations."
+                                class="w-full text-xs text-slate-800 leading-relaxed focus:outline-none resize-none bg-transparent">${appState.writingDraft}</textarea>
+                            
+                            <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                                <span id="essay-word-count" class="text-[11px] font-semibold ${wordCount >= currentPrompt.targetWords ? 'text-emerald-600' : 'text-slate-500'}">
+                                    ${wordCount} / ${currentPrompt.targetWords} words
+                                </span>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="insertSampleStarter()" class="text-[11px] font-medium text-slate-500 hover:text-navy-900 px-2 py-1 rounded bg-slate-100">
+                                        + Sample Intro
+                                    </button>
+                                    <button onclick="analyzeEssay()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl shadow-xs active:scale-95 transition">
+                                        Analyze Band
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ` : `
+                        <!-- Annotated Band 9.0 Model Essay -->
+                        <div class="ios-card p-4 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Examiner Band 9.0 Exemplar</span>
+                                <span class="text-[10px] text-slate-400">Tap highlights to inspect</span>
+                            </div>
+                            <div class="text-xs text-slate-800 leading-relaxed font-serif whitespace-pre-line">
+                                ${currentPrompt.modelSegments.map((seg, i) => {
+                                    if (seg.type === 'normal') return `<span>${seg.text}</span>`;
+                                    const badgeColor = seg.type === 'thesis' ? 'bg-amber-100 text-amber-950 border-b-2 border-amber-400' 
+                                                     : seg.type === 'cohesion' ? 'bg-sky-100 text-sky-950 border-b-2 border-sky-400'
+                                                     : 'bg-emerald-100 text-emerald-950 border-b-2 border-emerald-400';
+                                    return `<span onclick="showAnnotationNote(${i})" class="${badgeColor} px-1 rounded cursor-pointer font-medium">${seg.text}</span>`;
+                                }).join('')}
+                            </div>
+                            <div id="annotation-inspector" class="bg-navy-900 text-white p-3 rounded-xl text-[11px] leading-relaxed">
+                                <span class="text-gold-400 font-bold uppercase block text-[10px] mb-0.5">Examiner Commentary</span>
+                                Tap any highlighted phrase above to see why it scores Band 9.0.
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function countWords(str) {
+            const trimmed = str.trim();
+            return trimmed ? trimmed.split(/\s+/).length : 0;
+        }
+
+        function handleDraftInput(val) {
+            appState.writingDraft = val;
+            saveState();
+            const currentPrompt = WRITING_PROMPTS.find(p => p.id === appState.writingPromptId) || WRITING_PROMPTS[0];
+            const wc = countWords(val);
+            const el = document.getElementById('essay-word-count');
+            if (el) {
+                el.textContent = `${wc} / ${currentPrompt.targetWords} words`;
+                el.className = `text-[11px] font-semibold ${wc >= currentPrompt.targetWords ? 'text-emerald-600' : 'text-slate-500'}`;
+            }
+        }
+
+        function selectWritingPrompt(id) {
+            appState.writingPromptId = id;
+            const p = WRITING_PROMPTS.find(x => x.id === id);
+            writingSecondsLeft = (p ? p.mins : 40) * 60;
+            writingTimerRunning = false;
+            clearInterval(writingTimerInterval);
+            saveState();
+            renderWriting(document.getElementById('app-viewport'));
+        }
+
+        function setWritingMode(mode) {
+            appState.writingMode = mode;
+            saveState();
+            renderWriting(document.getElementById('app-viewport'));
+        }
+
+        function toggleWritingTimer() {
+            if (writingTimerRunning) {
+                clearInterval(writingTimerInterval);
+                writingTimerRunning = false;
+            } else {
+                writingTimerRunning = true;
+                writingTimerInterval = setInterval(() => {
+                    if (writingSecondsLeft > 0) {
+                        writingSecondsLeft--;
+                        const disp = document.getElementById('writing-timer-display');
+                        if (disp) {
+                            const m = String(Math.floor(writingSecondsLeft / 60)).padStart(2, '0');
+                            const s = String(writingSecondsLeft % 60).padStart(2, '0');
+                            disp.textContent = `${m}:${s}`;
+                        }
+                    } else {
+                        clearInterval(writingTimerInterval);
+                        writingTimerRunning = false;
+                        showToast('Time Expired', 'Your writing session timer has finished.', '⏱');
+                    }
+                }, 1000);
+            }
+            renderWriting(document.getElementById('app-viewport'));
+        }
+
+        function insertSampleStarter() {
+            const starter = "In contemporary discourse, the proposition that secondary school curricula should mandate unpaid community service has generated vigorous debate. While detractors contend that compulsory volunteering infringes upon adolescent autonomy, I firmly believe that structured civic engagement yields profound pedagogical and societal dividends.";
+            appState.writingDraft = appState.writingDraft ? appState.writingDraft + "\n\n" + starter : starter;
+            saveState();
+            renderWriting(document.getElementById('app-viewport'));
+        }
+
+        function showAnnotationNote(idx) {
+            const currentPrompt = WRITING_PROMPTS.find(p => p.id === appState.writingPromptId) || WRITING_PROMPTS[0];
+            const seg = currentPrompt.modelSegments[idx];
+            const box = document.getElementById('annotation-inspector');
+            if (box && seg && seg.note) {
+                box.innerHTML = `
+                    <span class="text-gold-400 font-bold uppercase block text-[10px] mb-0.5">Why This Scores Band 9.0</span>
+                    ${seg.note}
+                `;
+            }
+        }
+
+        function analyzeEssay() {
+            const text = appState.writingDraft.trim();
+            const wc = countWords(text);
+            if (wc < 20) {
+                showToast('Draft Too Short', 'Write at least 20 words (or tap + Sample Intro) to analyze.', '✍️');
+                return;
+            }
+
+            // Heuristic Lexical & Structural Analysis
+            const lower = text.toLowerCase();
+            const basicWordsMap = [
+                { basic: /\bvery\b/g, suggest: 'markedly / profoundly / acutely' },
+                { basic: /\bgood\b/g, suggest: 'beneficial / advantageous / salutary' },
+                { basic: /\bbad\b/g, suggest: 'detrimental / deleterious / adverse' },
+                { basic: /\bbig\b/g, suggest: 'substantial / considerable / monumental' },
+                { basic: /\bpeople think\b/g, suggest: 'proponents contend / critics argue' },
+                { basic: /\bnowadays\b/g, suggest: 'in the contemporary era / increasingly' }
+            ];
+
+            const upgradesFound = [];
+            basicWordsMap.forEach(item => {
+                if (item.basic.test(lower)) {
+                    upgradesFound.push(`Replace basic <strong>"${item.basic.source.replace(/\\b/g, '')}"</strong> → <em>${item.suggest}</em>`);
+                }
+            });
+
+            const cohesiveMarkers = ['while', 'whereas', 'nevertheless', 'conversely', 'moreover', 'furthermore', 'consequently', 'albeit', 'admittedly', 'primarily'];
+            const usedMarkers = cohesiveMarkers.filter(m => new RegExp(`\\b${m}\\b`, 'i').test(text));
+
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const avgSentenceLen = sentences.length ? Math.round(wc / sentences.length) : 0;
+
+            // Calculate estimated band score
+            let estBand = 7.0;
+            if (wc >= 140) estBand += 0.5;
+            if (usedMarkers.length >= 2) estBand += 0.5;
+            if (avgSentenceLen >= 16 && avgSentenceLen <= 32) estBand += 0.5;
+            if (upgradesFound.length === 0 && wc >= 60) estBand += 0.5;
+            estBand = Math.min(9.0, estBand);
+
+            appState.scores.writing = Math.max(appState.scores.writing, estBand);
+            saveState();
+
+            openModal(`
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Diagnostic Report</span>
+                            <h3 class="text-xl font-extrabold text-navy-900">Estimated Band ${estBand.toFixed(1)}</h3>
+                        </div>
+                        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-bold text-sm">✕</button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="ios-card p-2.5">
+                            <span class="text-[10px] text-slate-400 block">Word Count</span>
+                            <span class="text-sm font-bold text-navy-900">${wc}</span>
+                        </div>
+                        <div class="ios-card p-2.5">
+                            <span class="text-[10px] text-slate-400 block">Avg Sentence</span>
+                            <span class="text-sm font-bold text-navy-900">${avgSentenceLen} words</span>
+                        </div>
+                        <div class="ios-card p-2.5">
+                            <span class="text-[10px] text-slate-400 block">Cohesive Links</span>
+                            <span class="text-sm font-bold text-emerald-600">${usedMarkers.length} detected</span>
+                        </div>
+                    </div>
+
+                    <div class="ios-card p-3.5 space-y-2">
+                        <h4 class="text-xs font-bold text-navy-900 uppercase tracking-wider">Lexical Upgrade Suggestions</h4>
+                        ${upgradesFound.length > 0 ? `
+                            <ul class="space-y-1.5 text-xs text-slate-700">
+                                ${upgradesFound.map(u => `<li class="flex items-start gap-2"><span class="text-amber-500">▲</span><span>${u}</span></li>`).join('')}
+                            </ul>
+                        ` : `
+                            <p class="text-xs text-emerald-700 font-medium">✓ Zero elementary filler words detected. Strong C2 register maintained.</p>
+                        `}
+                    </div>
+
+                    <div class="ios-card p-3.5 space-y-1.5">
+                        <h4 class="text-xs font-bold text-navy-900 uppercase tracking-wider">Cohesion & Grammatical Range</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            ${usedMarkers.length > 0 
+                                ? `Detected sophisticated discourse markers: <strong>${usedMarkers.join(', ')}</strong>. Ensure complex subordinate clauses are balanced with crisp topic sentences.`
+                                : `Add concessive and contrastive cohesive devices (e.g., <em>While..., Conversely, Nevertheless</em>) to elevate Coherence & Cohesion toward Band 9.0.`}
+                        </p>
+                    </div>
+
+                    <button onclick="closeModal()" class="w-full py-3 rounded-2xl bg-navy-900 text-white text-xs font-bold">Done</button>
+                </div>
+            `);
+        }
+
+        /* -------------------- VIEW 4: SPEAKING SIMULATOR -------------------- */
+        function renderSpeaking(container) {
+            const card = SPEAKING_CARDS[appState.speakingCardIdx % SPEAKING_CARDS.length];
+            const timerLabel = speakingPhase === 'prep' ? `Prep: 0:${String(speakingSeconds).padStart(2, '0')}`
+                             : speakingPhase === 'speak' ? `Speak: ${Math.floor(speakingSeconds/60)}:${String(speakingSeconds%60).padStart(2, '0')}`
+                             : 'Start Cue Card Timer';
+
+            container.innerHTML = `
+                <div class="tab-view space-y-4">
+                    <div class="flex items-center justify-between pt-1">
+                        <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Speaking Fluency Coach</p>
+                            <h1 class="text-2xl font-extrabold text-navy-900 tracking-tight">Cue Card Studio</h1>
+                        </div>
+                        <button onclick="nextSpeakingCard()" class="px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-semibold text-navy-900 active:scale-95 transition">
+                            New Card ↻
+                        </button>
+                    </div>
+
+                    <!-- Official Part 2 Cue Card -->
+                    <div class="bg-gradient-to-br from-navy-900 to-navy-800 text-white rounded-3xl p-5 shadow-md space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-gold-400/20 text-gold-400">
+                                ${card.part}
+                            </span>
+                            <span class="text-[11px] text-slate-300">1m Prep • 2m Talk</span>
+                        </div>
+                        <h2 class="text-base font-bold leading-snug font-serif">${card.topic}</h2>
+                        <div class="space-y-1.5 pt-1">
+                            <p class="text-[11px] text-slate-400 font-medium">You should say:</p>
+                            <ul class="space-y-1 text-xs text-slate-200">
+                                ${card.bullets.map(b => `<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>${b}</li>`).join('')}
+                            </ul>
+                        </div>
+
+                        <!-- Prep / Speak Timer Controls -->
+                        <div class="pt-2 flex gap-2">
+                            <button onclick="startSpeakingCueTimer()" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition ${speakingPhase !== 'idle' ? 'bg-amber-500 text-navy-950' : 'bg-white text-navy-900'}">
+                                ⏱ ${timerLabel}
+                            </button>
+                            ${speakingPhase !== 'idle' ? `
+                                <button onclick="resetSpeakingTimer()" class="px-3 py-2.5 rounded-xl bg-white/15 text-white text-xs font-semibold">Reset</button>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <!-- Voice Recorder & Playback Card -->
+                    <div class="ios-card p-4 flex items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-xs font-bold text-navy-900">Self-Audit Voice Recorder</h3>
+                            <p class="text-[11px] text-slate-500 mt-0.5">Record your response to check pacing & natural intonation.</p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button onclick="toggleAudioRecording()" class="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold shadow-sm transition ${isRecordingAudio ? 'bg-rose-600 recording-pulse' : 'bg-navy-900'}">
+                                ${isRecordingAudio ? '■' : '🎙'}
+                            </button>
+                            ${recordedAudioUrl ? `
+                                <button onclick="playRecordedAudio()" class="px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
+                                    ▶ Play
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <!-- Band 9.0 Model Response with Discourse Markers -->
+                    <div class="ios-card p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
+                                Band 9.0 Native-Like Response
+                            </span>
+                            <button onclick="speakSampleCard()" class="text-xs font-semibold text-navy-900 bg-slate-100 px-2.5 py-1 rounded-lg">
+                                🔊 Listen
+                            </button>
+                        </div>
+                        <div class="text-xs text-slate-700 leading-relaxed">
+                            ${card.sampleHtml}
+                        </div>
+                        <div class="pt-2 border-t border-slate-100 space-y-1">
+                            <p class="text-[10px] font-bold uppercase text-slate-400">Idiomatic & Discourse Highlights</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                ${card.markers.map(m => `<span class="text-[10px] font-medium bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md">${m}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 3 Abstract Discussion Prompts -->
+                    <div class="ios-card p-4 space-y-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700">Part 3 • Abstract Follow-Up</span>
+                        <ul class="space-y-2 text-xs text-slate-700">
+                            ${card.part3.map((q, i) => `<li class="p-2.5 rounded-xl bg-slate-50 font-medium">${i+1}. ${q}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function nextSpeakingCard() {
+            appState.speakingCardIdx = (appState.speakingCardIdx + 1) % SPEAKING_CARDS.length;
+            resetSpeakingTimer();
+            saveState();
+            renderSpeaking(document.getElementById('app-viewport'));
+        }
+
+        function startSpeakingCueTimer() {
+            clearInterval(speakingTimerInterval);
+            if (speakingPhase === 'idle') {
+                speakingPhase = 'prep';
+                speakingSeconds = 60;
+                showToast('1-Minute Prep Started', 'Outline 3 high-level keywords for your cue card.', '⏱');
+            } else if (speakingPhase === 'prep') {
+                speakingPhase = 'speak';
+                speakingSeconds = 120;
+                showToast('2-Minute Speaking Timer', 'Deliver your response smoothly.', '🎙');
+            } else {
+                resetSpeakingTimer();
+                return;
+            }
+
+            speakingTimerInterval = setInterval(() => {
+                if (speakingSeconds > 0) {
+                    speakingSeconds--;
+                    if (appState.activeTab === 'speaking') renderSpeaking(document.getElementById('app-viewport'));
+                } else if (speakingPhase === 'prep') {
+                    speakingPhase = 'speak';
+                    speakingSeconds = 120;
+                    showToast('Prep Complete — Speak Now!', '2-minute Band 9.0 delivery timer active.', '🎙');
+                } else {
+                    clearInterval(speakingTimerInterval);
+                    speakingPhase = 'idle';
+                    appState.scores.speaking = Math.min(9.0, +(appState.scores.speaking + 0.1).toFixed(1));
+                    saveState();
+                    showToast('2-Minute Target Reached!', 'Speaking fluency score boosted.', '★');
+                    if (appState.activeTab === 'speaking') renderSpeaking(document.getElementById('app-viewport'));
+                }
+            }, 1000);
+            renderSpeaking(document.getElementById('app-viewport'));
+        }
+
+        function resetSpeakingTimer() {
+            clearInterval(speakingTimerInterval);
+            speakingPhase = 'idle';
+            speakingSeconds = 0;
+            if (appState.activeTab === 'speaking') renderSpeaking(document.getElementById('app-viewport'));
+        }
+
+        async function toggleAudioRecording() {
+            if (isRecordingAudio) {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                }
+                isRecordingAudio = false;
+                renderSpeaking(document.getElementById('app-viewport'));
+                return;
+            }
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                showToast('Mic Unavailable', 'Microphone access is restricted in this preview frame.', '🎙');
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioChunks = [];
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = e => {
+                    if (e.data.size > 0) audioChunks.push(e.data);
+                };
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                    recordedAudioUrl = URL.createObjectURL(blob);
+                    stream.getTracks().forEach(t => t.stop());
+                    showToast('Recording Saved', 'Tap Play to audit your fluency and pronunciation.', '✓');
+                    if (appState.activeTab === 'speaking') renderSpeaking(document.getElementById('app-viewport'));
+                };
+                mediaRecorder.start();
+                isRecordingAudio = true;
+                showToast('Recording Live...', 'Speak clearly at a natural academic pace.', '🎙');
+                renderSpeaking(document.getElementById('app-viewport'));
+            } catch (err) {
+                showToast('Mic Permission Needed', 'Enable microphone permissions in browser settings.', '!');
+            }
+        }
+
+        function playRecordedAudio() {
+            if (!recordedAudioUrl) return;
+            const audio = new Audio(recordedAudioUrl);
+            audio.play();
+            showToast('Playing Recording', 'Listening to your practice take...', '▶');
+        }
+
+        function speakSampleCard() {
+            const card = SPEAKING_CARDS[appState.speakingCardIdx % SPEAKING_CARDS.length];
+            const plain = card.sampleHtml.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+            speakText(plain);
+        }
+
+        /* -------------------- VIEW 5: READING & LISTENING PRECISION DRILLS -------------------- */
+        function renderDrills(container) {
+            container.innerHTML = `
+                <div class="tab-view space-y-4">
+                    <div class="flex items-center justify-between pt-1">
+                        <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Band 8.5 → 9.0 Differentiators</p>
+                            <h1 class="text-2xl font-extrabold text-navy-900 tracking-tight">Precision Drills</h1>
+                        </div>
+                        <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            ${appState.completedDrills.length}/${PRECISION_DRILLS.length} Mastered
+                        </span>
+                    </div>
+
+                    <div class="space-y-4">
+                        ${PRECISION_DRILLS.map((drill, dIdx) => {
+                            const isSolved = appState.completedDrills.includes(drill.id);
+                            return `
+                                <div class="ios-card p-4 space-y-3" id="drill-card-${drill.id}">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-800">
+                                            ${drill.skill}
+                                        </span>
+                                        ${isSolved ? '<span class="text-[11px] font-bold text-emerald-600">✓ Mastered</span>' : ''}
+                                    </div>
+
+                                    <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-3">
+                                        <p class="text-xs text-slate-700 leading-relaxed font-serif">${drill.passage}</p>
+                                    </div>
+
+                                    <p class="text-xs font-bold text-navy-900">${drill.question}</p>
+
+                                    <div class="space-y-1.5">
+                                        ${drill.options.map((opt, oIdx) => `
+                                            <button onclick="answerDrill('${drill.id}', ${oIdx})"
+                                                class="drill-opt-${drill.id} w-full text-left px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition flex items-center justify-between">
+                                                <span>${opt}</span>
+                                                <span class="opt-badge text-xs"></span>
+                                            </button>
+                                        `).join('')}
+                                    </div>
+
+                                    <div id="drill-exp-${drill.id}" class="${isSolved ? '' : 'hidden'} bg-navy-900 text-white p-3 rounded-xl text-[11px] leading-relaxed">
+                                        ${drill.explanation}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function answerDrill(drillId, chosenIdx) {
+            const drill = PRECISION_DRILLS.find(d => d.id === drillId);
+            if (!drill) return;
+
+            const buttons = document.querySelectorAll(`.drill-opt-${drillId}`);
+            buttons.forEach((btn, idx) => {
+                btn.classList.remove('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'bg-rose-50', 'border-rose-400', 'text-rose-900');
+                const badge = btn.querySelector('.opt-badge');
+                if (idx === drill.correct) {
+                    btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900');
+                    badge.textContent = '✓';
+                } else if (idx === chosenIdx && chosenIdx !== drill.correct) {
+                    btn.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-900');
+                    badge.textContent = '✕';
+                } else {
+                    badge.textContent = '';
+                }
+            });
+
+            const expBox = document.getElementById(`drill-exp-${drillId}`);
+            if (expBox) expBox.classList.remove('hidden');
+
+            if (chosenIdx === drill.correct) {
+                if (!appState.completedDrills.includes(drillId)) {
+                    appState.completedDrills.push(drillId);
+                    appState.scores.reading = Math.min(9.0, +(appState.scores.reading + 0.1).toFixed(1));
+                    appState.scores.listening = Math.min(9.0, +(appState.scores.listening + 0.1).toFixed(1));
+                    saveState();
+                }
+                showToast('Band 9.0 Precision!', 'Trap avoided. Logic explanation unlocked.', '✓');
+            } else {
+                showToast('Classic IELTS Trap', 'Review the examiner logic below.', '!');
+            }
+        }
+
+        /* ==========================================================================
+           5. MODAL SHEET SYSTEM (QUICK 5-MINUTE CHALLENGE)
+           ========================================================================== */
+        function openModal(htmlContent) {
+            const modal = document.getElementById('ios-modal');
+            const sheet = document.getElementById('ios-modal-sheet');
+            sheet.innerHTML = htmlContent;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('ios-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openQuickDrillModal() {
+            const q1 = PRECISION_DRILLS[0];
+            openModal(`
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">5-Minute Sprint</span>
+                            <h3 class="text-lg font-extrabold text-navy-900">Band 9.0 Rapid Check</h3>
+                        </div>
+                        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-bold text-sm">✕</button>
+                    </div>
+
+                    <div class="ios-card p-3.5 bg-slate-50">
+                        <p class="text-xs text-slate-700 font-serif leading-relaxed">${q1.passage}</p>
+                    </div>
+
+                    <p class="text-xs font-bold text-navy-900">${q1.question}</p>
+
+                    <div class="space-y-2">
+                        ${q1.options.map((opt, idx) => `
+                            <button onclick="handleQuickDrillAnswer(${idx === q1.correct})" class="w-full py-3 px-4 rounded-xl bg-white border border-slate-200 text-xs font-bold text-navy-900 hover:bg-emerald-50 hover:border-emerald-400 transition text-left">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `);
+        }
+
+        function handleQuickDrillAnswer(isCorrect) {
+            if (isCorrect) {
+                appState.scores.reading = Math.min(9.0, +(appState.scores.reading + 0.1).toFixed(1));
+                saveState();
+                closeModal();
+                showToast('Sprint Complete! +0.1 Band', 'Flawless T/F/NG discrimination.', '🔥');
+                if (appState.activeTab === 'home') renderHome(document.getElementById('app-viewport'));
+            } else {
+                showToast('Watch the Qualifier!', 'Re-read "restricts its commercial viability primarily to..."', '!');
+            }
+        }
+
+        /* ==========================================================================
+           6. INITIALIZE APPLICATION ON LOAD
+           ========================================================================== */
+        window.onload = function() {
+            switchTab(appState.activeTab || 'home');
+        };
+    </script>
+</body>
+</html>
